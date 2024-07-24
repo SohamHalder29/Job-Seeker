@@ -18,9 +18,9 @@ export function ProfilePopover() {
     const { authUser } = useSelector(store => store.auth);
     const logoutHandler = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/api/v1/user/logout", { withCredentials: true });
+            const res = await axios.get("api/v1/user/logout", { withCredentials: true });
             
-            if (res.data.success) {
+            if (!res.data.success) {
                 dispatch(setAuthUser(null));
                 navigate("/");
                 toast.success(res.data.message);

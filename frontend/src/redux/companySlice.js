@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import reducer from "./authSlice";
 
 const companySlice = createSlice({
     name: "company",
@@ -9,7 +10,8 @@ const companySlice = createSlice({
         searchCompanyByText: ""
     },
     reducers: {
-        setCompanies: (state, action) => {
+        setCompanies: ( state, action ) => {
+            console.log("Soham Setting companies:", action);
             state.companies = action.payload
         },
         setSingleCompany: (state, action) => {

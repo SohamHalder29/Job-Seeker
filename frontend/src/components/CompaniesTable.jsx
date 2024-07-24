@@ -12,8 +12,9 @@ import { useSelector } from "react-redux"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { animate, motion } from "framer-motion";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { split } from "postcss/lib/list";
 
 
 const CompaniesTable = () => {
@@ -22,6 +23,8 @@ const CompaniesTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Companies:", companies); // Debugging line
+    console.log("Search Text:", searchCompanyByText); // Debugging line
     const filteredCompany = companies && companies.filter((company) => {
       if (!searchCompanyByText) return true;
       return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());

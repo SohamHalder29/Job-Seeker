@@ -54,7 +54,7 @@ export const login = async (req, res) => {
         const tokenData = {
             userId: user._id,
         }
-        const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
+        const token = await jwt.sign(tokenData, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '1d' });
 
         user = {
             _id: user._id,
@@ -75,14 +75,22 @@ export const login = async (req, res) => {
 }
 export const logout = async (req, res) => {
     try {
-        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+        res.cookie("token", "", {
+            expires: new Date(0), // Clear the cookie
+        });
+        return res.status(200).json({
             message: "Logged out successfully",
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "An error occurred during logout",
+            success: false
+        });
     }
-}
+};
+
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;

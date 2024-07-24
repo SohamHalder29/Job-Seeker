@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import Navbar from '../shared/Navbar'
-import { Button } from '../ui/button'
-import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '@/redux/authSlice'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
-import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import Navbar from '../shared/Navbar';
+import { Button } from '../ui/button';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoading } from '@/redux/authSlice';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const CreateJobs = () => {
     const [input, setInput] = useState({
@@ -38,7 +38,7 @@ const CreateJobs = () => {
         e.preventDefault();
         try {
             dispatch(setLoading(true));
-            const res = await axios.post(`http://localhost:8000/api/v1/job/postjob`, input, {
+            const res = await axios.post(`/api/v1/job/postjob`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -64,8 +64,9 @@ const CreateJobs = () => {
             experience: "",
             position: 0,
             companyId: ""
-        })
+        });
     }
+
     return (
         <div>
             <Navbar />
@@ -154,7 +155,7 @@ const CreateJobs = () => {
                             />
                         </div>
                         {
-                            companies.length !== 0 && (
+                            companies && companies.length > 0 && (
                                 <Select onValueChange={handleSelectChange}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a Company" />
@@ -162,32 +163,29 @@ const CreateJobs = () => {
                                     <SelectContent>
                                         <SelectGroup>
                                             {
-                                                companies && companies.map((company) => {
-                                                    return (
-                                                        <SelectItem
-                                                            key={company?._id}
-                                                            value={company?.name.toLowerCase()}
-                                                        >
-                                                            {company?.name}
-                                                        </SelectItem>
-                                                    )
-                                                })
+                                                companies.map((company) => (
+                                                    <SelectItem
+                                                        key={company._id}
+                                                        value={company.name.toLowerCase()}
+                                                    >
+                                                        {company.name}
+                                                    </SelectItem>
+                                                ))
                                             }
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             )
                         }
-
                     </div>
-                    <Button onClick={submitHandler} disabled={companies?.length === 0 ? true : false} className='w-full mt-4'>Post New Job</Button>
+                    <Button onClick={submitHandler} disabled={!companies || companies.length === 0} className='w-full mt-4'>Post New Job</Button>
                     {
-                        companies.length === 0 && <p className='text-red-600 text-xs font-bold text-center my-3'>*Please register a company first, before posting a jobs</p>
+                        (!companies || companies.length === 0) && <p className='text-red-600 text-xs font-bold text-center my-3'>*Please register a company first, before posting a job</p>
                     }
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default CreateJobs
+export default CreateJobs;
